@@ -1,40 +1,64 @@
 import { ref } from 'vue'
 import { Router, useRouter } from 'vue-router'
 import { authApi, axiosLoginInstance } from 'src/api/api'
-import { JWTRefresh, UsersControllerGetAllOrderEnum } from 'src/api/auth'
+import { JWTRefresh, UserCreate, UserItem, UsersControllerGetAllOrderEnum, UserUpdate } from 'src/api/auth'
 import axios from 'axios'
+import { REFRESH_TOKEN_STORE_NAME } from 'src/utils/const'
+import { useAbortController } from 'src/composables/abortController'
 
 export function useAuth () {
-  const users = ref([])
+  const users = ref<Array<UserItem>>([])
+  const count = ref(0)
   const router = useRouter()
-  const postLogin = async (login:string, password:string) => {
+  const abort = useAbortController()
+  const postLogin = async (login: string, password: string) => {
     const sessionId = `${Date.now()}_${Math.trunc(Math.random() * 1000)}`
     const token = await authApi.authControllerLogin({ password, login, sessionId })
 
     window.localStorage.setItem('refreshToken', token.data.refreshToken)
-
-    console.log('router', router)
     await router.push('/')
+  }
+  const createUser = async (userCreate: UserCreate) => {
+    return authApi.usersControllerCreate(userCreate)
+  }
+  const updateUser = async (login: string, userUpdate: UserUpdate) => {
+    return authApi.usersControllerUpdate(login, userUpdate)
+  }
+  const deleteUser = async (login: string) => {
+    return authApi.usersControllerDelete(login)
+  }
+  const whoAmi = async (): Promise<UserItem> => {
+    const response = await authApi.authControllerWhoAmi()
+    return response.data
+  }
+  const fetchUsersWithAbort = (param: object) => {
+    return abort(fetchUsers, { ...param })
   }
   const fetchUsers = async ({
     limit = 100,
     offset = 0,
     sort = 'firstName',
     order = UsersControllerGetAllOrderEnum.Asc,
-    search = undefined
+    search = undefined,
+    options = {}
   }) => {
-    const response = await authApi.usersControllerGetAll(limit, offset, sort, order, search)
+    const response = await authApi.usersControllerGetAll(limit, offset, sort, order, search, options)
     users.value = response.data.items
-    console.log('users', users.value)
+    count.value = response.data.count
   }
   return {
-    fetchUsers,
+    fetchUsers: fetchUsersWithAbort,
     postLogin,
-    users
+    users,
+    count,
+    createUser,
+    deleteUser,
+    updateUser,
+    whoAmi
   }
 }
 
-export function logout (router:Router) {
+export function logout (router: Router) {
   window.localStorage.removeItem('refreshToken')
   router.push('/login')
 }
@@ -45,8 +69,6 @@ export function addInterceptors () {
     (response) => response,
     async (error) => {
       const config = error?.config
-      console.log('rejected', error)
-      console.log('router', router)
 
       if (error?.response?.status === 504) {
         /* Notify.create({
@@ -63,7 +85,7 @@ export function addInterceptors () {
       } else if (error?.response?.status === 401 && !config?.sent) {
         config.sent = true
 
-        const refreshToken = window.localStorage.getItem('refreshToken')
+        const refreshToken = window.localStorage.getItem(REFRESH_TOKEN_STORE_NAME)
 
         if (!refreshToken) {
           logout(router)
@@ -73,9 +95,9 @@ export function addInterceptors () {
           const result = (await authApi.authControllerRefresh({ refreshToken }))
             .data as unknown as JWTRefresh
           if (result?.refreshToken) {
-            window.localStorage.setItem('refreshToken', result.refreshToken)
+            window.localStorage.setItem(REFRESH_TOKEN_STORE_NAME, result.refreshToken)
           } else {
-            window.localStorage.removeItem('refreshToken')
+            window.localStorage.removeItem(REFRESH_TOKEN_STORE_NAME)
           }
         } catch (e) {
           console.log(e)
