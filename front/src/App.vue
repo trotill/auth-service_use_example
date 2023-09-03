@@ -1,9 +1,9 @@
 <template>
-  <router-view />
+<router-view/>
 </template>
 
 <script setup lang="ts">
-import { addInterceptors, logout } from 'src/composables/useAuth'
+import { addInterceptors } from 'src/composables/useAuth'
 
 addInterceptors()
 </script>

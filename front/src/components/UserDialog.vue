@@ -106,7 +106,7 @@ const headerText = computed(() => {
 
 const showInputPassword = ref(!props.edit)
 const param = reactive<UserItem>({ ...props.userParam })
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
 defineEmits([...useDialogPluginComponent.emits])
 
 async function saveUser () {
@@ -119,11 +119,8 @@ async function saveUser () {
       message: 'Passwords is different'
     })
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { createdAt, updatedAt, ...cleanParam } = param
-  console.log('param', param)
-  const login = param.login
-  console.log(`login ${login}, password ${password.value}, getPassword ${getPassword(login, password.value ?? '')}`)
-
   const hashedPwd = (password.value) ? getPassword(param.login, password.value) : undefined
   onDialogOK({ ...cleanParam, password: hashedPwd })
 }

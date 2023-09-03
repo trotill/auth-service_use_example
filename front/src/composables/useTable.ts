@@ -1,4 +1,4 @@
-import { computed, ref, watch, ComputedRef, Ref } from 'vue'
+import { computed, ref, watch, Ref } from 'vue'
 import { QTableProps } from 'quasar'
 
 export function useTable ({

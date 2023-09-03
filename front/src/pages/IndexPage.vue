@@ -120,7 +120,6 @@ function editUserClick (userParam: UserItem) {
     component: UserDialog,
     componentProps: { edit: true, userParam }
   }).onOk(async (result) => {
-    console.log('save', result)
     const { login, ...other } = result
     await updateUser(login, other)
     getUsers()
@@ -133,7 +132,6 @@ async function removeUserClick (login: string) {
 }
 
 async function logoutClick () {
-  console.log('logout')
   logout(router)
 }
 
