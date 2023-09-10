@@ -60,6 +60,7 @@
           </q-td>
         </template>
       </q-table>
+      <example-list/>
     </q-page>
   </q-page-container>
 </q-layout>
@@ -74,6 +75,7 @@ import { UserCreate, UserItem, UsersControllerGetAllOrderEnum } from 'src/api/au
 import UserDialog from 'components/UserDialog.vue'
 import { useRouter } from 'vue-router'
 import { ROWS_PER_PAGE_OPTIONS_DEFAULT, SORT_BY_OPTIONS_DEFAULT } from 'src/utils/const'
+import ExampleList from 'components/ExampleList.vue'
 
 const router = useRouter()
 const { fetchUsers, users, count, createUser, deleteUser, updateUser, whoAmi } = useAuth()
