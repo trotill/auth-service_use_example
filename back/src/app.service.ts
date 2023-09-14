@@ -15,4 +15,8 @@ export class AppService {
   decrement () {
     if (this.result > 0) this.result--
   }
+
+  randomColor (role: string) {
+    return role === 'admin' ? '#' + Math.floor(Math.random() * 16777215).toString(16) : '#000000'
+  }
 }

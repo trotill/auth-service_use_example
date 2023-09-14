@@ -4,6 +4,7 @@ import { useQuasar } from 'quasar'
 
 export function useExample () {
   const incDecValue = ref(0)
+  const randomColor = ref('#000000')
   const $q = useQuasar()
 
   function incrementReq () {
@@ -16,8 +17,8 @@ export function useExample () {
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (('message' in e) && ('code' in e)) {
-        $q.notify({ message: `${e.message}, code: ${e.code}`, type: 'negative' })
+      if (('response' in e) && ('statusText' in e.response) && ('status' in e.response)) {
+        $q.notify({ message: `${e.response.statusText}, code: ${e.response.status}`, type: 'negative' })
       }
     }
   }
@@ -27,10 +28,17 @@ export function useExample () {
     incDecValue.value = result.data
   }
 
+  async function getRandomColor () {
+    const result = await axios.get('/api/randomColor')
+    randomColor.value = result.data
+  }
+
   return {
     incrementReq,
     decrementReq,
     incDecValue,
-    getValue
+    getValue,
+    getRandomColor,
+    randomColor
   }
 }
