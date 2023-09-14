@@ -29,7 +29,7 @@ export class AppController {
     randomColor (@Req() request: Request): string {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const role = ('whoAmi' in request && ('role' in request.whoAmi)) ? request.whoAmi.role : 'guest'
+      const role = ('whoAmi' in request && ('role' in request.whoAmi)) ? request.whoAmi.role as string : 'guest'
       return this.appService.randomColor(role)
     }
 }
