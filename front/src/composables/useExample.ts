@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { showError } from 'src/utils/error'
 
 export function useExample () {
   const incDecValue = ref(0)
@@ -15,11 +16,7 @@ export function useExample () {
     try {
       await axios.post('/api/decrement')
     } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (('response' in e) && ('statusText' in e.response) && ('status' in e.response)) {
-        $q.notify({ message: `${e.response.statusText}, code: ${e.response.status}`, type: 'negative' })
-      }
+      showError($q, e)
     }
   }
 

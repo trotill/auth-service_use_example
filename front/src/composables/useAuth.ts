@@ -5,18 +5,25 @@ import { JWTRefresh, UserCreate, UserItem, UsersControllerGetAllOrderEnum, UserU
 import axios from 'axios'
 import { REFRESH_TOKEN_STORE_NAME } from 'src/utils/const'
 import { useAbortController } from 'src/composables/abortController'
+import { useQuasar } from 'quasar'
+import { showError } from 'src/utils/error'
 
 export function useAuth () {
   const users = ref<Array<UserItem>>([])
   const count = ref(0)
   const router = useRouter()
   const abort = useAbortController()
+  const $q = useQuasar()
   const postLogin = async (login: string, password: string) => {
     const sessionId = `${Date.now()}_${Math.trunc(Math.random() * 1000)}`
-    const token = await authApi.authControllerLogin({ password, login, sessionId })
+    try {
+      const token = await authApi.authControllerLogin({ password, login, sessionId })
 
-    window.localStorage.setItem('refreshToken', token.data.refreshToken)
-    await router.push('/')
+      window.localStorage.setItem('refreshToken', token.data.refreshToken)
+      await router.push('/')
+    } catch (e) {
+      showError($q, e)
+    }
   }
   const createUser = async (userCreate: UserCreate) => {
     return authApi.usersControllerCreate(userCreate)
