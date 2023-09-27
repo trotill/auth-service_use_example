@@ -26,13 +26,13 @@ export function useAuth () {
     }
   }
   const createUser = async (userCreate: UserCreate) => {
-    return authApi.usersControllerCreate(userCreate)
+    return authApi.usersControllerCreate(userCreate).catch((e) => showError($q, e))
   }
   const updateUser = async (login: string, userUpdate: UserUpdate) => {
-    return authApi.usersControllerUpdate(login, userUpdate)
+    return authApi.usersControllerUpdate(login, userUpdate).catch((e) => showError($q, e))
   }
   const deleteUser = async (login: string) => {
-    return authApi.usersControllerDelete(login)
+    return authApi.usersControllerDelete(login).catch((e) => showError($q, e))
   }
   const whoAmi = async (): Promise<UserItem> => {
     const response = await authApi.authControllerWhoAmi()

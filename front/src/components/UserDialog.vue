@@ -118,6 +118,7 @@ async function saveUser () {
       type: 'negative',
       message: 'Passwords is different'
     })
+    return
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { createdAt, updatedAt, ...cleanParam } = param
