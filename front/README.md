@@ -1,8 +1,9 @@
-# auth demo (front)
+# Demo application to evaluate the authorization service (frontend on Vue3 quasar)
 
-auth demo
+A demo application that allows you to evaluate the capabilities of the authorization service. Frontend part.
 
 ## Install the dependencies
+
 ```bash
 yarn
 # or
@@ -10,24 +11,11 @@ npm install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
 
+Before launching, install and run the authorization service and backend demo application.
 
-### Lint the files
 ```bash
-yarn lint
+yarn dev
 # or
-npm run lint
+npm run dev
 ```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
