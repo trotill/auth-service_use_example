@@ -2,6 +2,10 @@
 
 A demo application that allows you to evaluate the capabilities of the authorization service. Backend part.
 
+## Dependencies
+
+1. nodejs 18.14.0
+
 ## Install the dependencies
 
 ```bash
