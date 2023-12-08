@@ -1,10 +1,14 @@
 {
-  "name": "auth-service_use_example",
+  "name": "auth-service_use_example backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "description": "demo backend for auth-service-nestjs",
+  "author": "develinux",
+  "homepage":"https://github.com/trotill/auth-service_use_example",
+  "bugs":{
+      "email":"info@11-parts.com"
+  },
+  "license": "MIT",
+  "private": false,
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

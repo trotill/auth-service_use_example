@@ -1,10 +1,14 @@
 {
-  "name": "front",
+  "name": "auth-service_use_example frontend",
   "version": "0.0.1",
-  "description": "auth demo",
-  "productName": "auth demo",
-  "author": "Ilya Gorchakov",
-  "private": true,
+  "description": "demo frontend for auth-service_use_example backend",
+  "author": "develinux",
+  "homepage":"https://github.com/trotill/auth-service_use_example",
+  "bugs":{
+      "email":"info@11-parts.com"
+  },
+  "license": "MIT",
+  "private": false,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
