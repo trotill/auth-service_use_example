@@ -3,10 +3,10 @@
   <q-card class="main q-pa-md">
     <q-card-section class="q-pa-none q-pt-md">
       <q-form @submit="onSubmit" class="column q-gutter-md">
-        <q-input v-model="login" label="Логин" outlined dense/>
+        <q-input v-model="login" label="Login" outlined dense/>
         <q-input
           v-model="password"
-          label="Пароль"
+          label="Password"
           outlined
           dense
           type="password"
@@ -15,7 +15,7 @@
           <q-btn
             class="full-width"
             color="primary"
-            label="Войти"
+            label="Login"
             type="submit"
             no-caps
           />

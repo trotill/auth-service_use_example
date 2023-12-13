@@ -1,11 +1,11 @@
 {
-  "name": "auth-service_use_example frontend",
-  "version": "0.0.1",
+  "name": "auth-service_use_example-frontend",
+  "version": "0.0.2",
   "description": "demo frontend for auth-service_use_example backend",
   "author": "develinux",
-  "homepage":"https://github.com/trotill/auth-service_use_example",
-  "bugs":{
-      "email":"info@11-parts.com"
+  "homepage": "https://github.com/trotill/auth-service_use_example",
+  "bugs": {
+    "email": "info@11-parts.com"
   },
   "license": "MIT",
   "private": false,

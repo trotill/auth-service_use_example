@@ -68,17 +68,16 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { logout, useAuth } from 'src/composables/useAuth'
+import { useAuth } from 'src/composables/useAuth'
 import { useTable } from 'src/composables/useTable'
 import { QTableProps, useQuasar } from 'quasar'
 import { UserCreate, UserItem, UsersControllerGetAllOrderEnum } from 'src/api/auth'
 import UserDialog from 'components/UserDialog.vue'
-import { useRouter } from 'vue-router'
+
 import { ROWS_PER_PAGE_OPTIONS_DEFAULT, SORT_BY_OPTIONS_DEFAULT } from 'src/utils/const'
 import ExampleList from 'components/ExampleList.vue'
 
-const router = useRouter()
-const { fetchUsers, users, count, createUser, deleteUser, updateUser, whoAmi } = useAuth()
+const { fetchUsers, users, count, createUser, deleteUser, updateUser, whoAmi, logout, logoutRequest } = useAuth()
 const { limit, offset, tablePagination } = useTable({
   sortByDef: SORT_BY_OPTIONS_DEFAULT,
   rowsPerPageDef: ROWS_PER_PAGE_OPTIONS_DEFAULT[0],
@@ -87,6 +86,7 @@ const { limit, offset, tablePagination } = useTable({
 })
 const $q = useQuasar()
 const sourceUser = ref('')
+const login = ref('')
 const columns = [
   { name: 'login', align: 'center', label: 'Login', field: 'login', sortable: true },
   { name: 'firstName', align: 'center', label: 'First name', field: 'firstName', sortable: true },
@@ -134,7 +134,8 @@ async function removeUserClick (login: string) {
 }
 
 async function logoutClick () {
-  logout(router)
+  await logoutRequest(login.value)
+  await logout()
 }
 
 function getLockIcon (lock: boolean) {
@@ -153,6 +154,7 @@ function getUsers () {
 onMounted(() => {
   whoAmi().then((ami: UserItem) => {
     sourceUser.value = `User: ${ami.login}, Role: ${ami.role}`
+    login.value = ami.login
   })
   getUsers()
 })

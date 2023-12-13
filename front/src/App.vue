@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { addInterceptors } from 'src/composables/useAuth'
+import { addInterceptors } from 'src/api/interceptors'
 
 addInterceptors()
 </script>

@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { DefaultApi as AuthApi } from 'src/api/auth'
+import { AuthorizationApi, UserManagementApi } from 'src/api/auth'
 
-export const axiosLoginInstance = axios.create()
+export const axiosInstance = axios.create()
 
-export const authApi = new AuthApi(undefined, '', axiosLoginInstance)
+export const authApi = new AuthorizationApi(undefined, '', axiosInstance)
+export const userApi = new UserManagementApi(undefined, '', axiosInstance)

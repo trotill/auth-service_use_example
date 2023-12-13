@@ -1,9 +1,7 @@
 import { ref } from 'vue'
-import { Router, useRouter } from 'vue-router'
-import { authApi, axiosLoginInstance } from 'src/api/api'
-import { JWTRefresh, UserCreate, UserItem, UsersControllerGetAllOrderEnum, UserUpdate } from 'src/api/auth'
-import axios from 'axios'
-import { REFRESH_TOKEN_STORE_NAME } from 'src/utils/const'
+import { useRouter } from 'vue-router'
+import { authApi, userApi } from 'src/api/api'
+import { UserCreate, UserItem, UsersControllerGetAllOrderEnum, UserUpdate } from 'src/api/auth'
 import { useAbortController } from 'src/composables/abortController'
 import { useQuasar } from 'quasar'
 import { showError } from 'src/utils/error'
@@ -20,19 +18,20 @@ export function useAuth () {
       const token = await authApi.authControllerLogin({ password, login, sessionId })
 
       window.localStorage.setItem('refreshToken', token.data.refreshToken)
+      window.localStorage.setItem('sessionId', sessionId)
       await router.push('/')
     } catch (e) {
       showError($q, e)
     }
   }
   const createUser = async (userCreate: UserCreate) => {
-    return authApi.usersControllerCreate(userCreate).catch((e) => showError($q, e))
+    return userApi.usersControllerCreate(userCreate).catch((e) => showError($q, e))
   }
   const updateUser = async (login: string, userUpdate: UserUpdate) => {
-    return authApi.usersControllerUpdate(login, userUpdate).catch((e) => showError($q, e))
+    return userApi.usersControllerUpdate(login, userUpdate).catch((e) => showError($q, e))
   }
   const deleteUser = async (login: string) => {
-    return authApi.usersControllerDelete(login).catch((e) => showError($q, e))
+    return userApi.usersControllerDelete(login).catch((e) => showError($q, e))
   }
   const whoAmi = async (): Promise<UserItem> => {
     const response = await authApi.authControllerWhoAmi()
@@ -49,10 +48,22 @@ export function useAuth () {
     search = undefined,
     options = {}
   }) => {
-    const response = await authApi.usersControllerGetAll(limit, offset, sort, order, search, options)
+    const response = await userApi.usersControllerGetAll(limit, offset, sort, order, search, options)
     users.value = response.data.items
     count.value = response.data.count
   }
+
+  async function logoutRequest (login: string) {
+    const sessionId = window.localStorage.getItem('sessionId') ?? '_'
+    return authApi.authControllerLogout({ login, sessionId })
+  }
+
+  async function logout () {
+    window.localStorage.removeItem('refreshToken')
+    window.localStorage.removeItem('sessionId')
+    return router.push('/login')
+  }
+
   return {
     fetchUsers: fetchUsersWithAbort,
     postLogin,
@@ -61,58 +72,8 @@ export function useAuth () {
     createUser,
     deleteUser,
     updateUser,
-    whoAmi
+    whoAmi,
+    logout,
+    logoutRequest
   }
-}
-
-export function logout (router: Router) {
-  window.localStorage.removeItem('refreshToken')
-  router.push('/login')
-}
-
-export function addInterceptors () {
-  const router = useRouter()
-  axiosLoginInstance.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const config = error?.config
-
-      if (error?.response?.status === 504) {
-        /* Notify.create({
-          type: 'negative',
-          message: 'Сервис авторизации недоступен',
-          caption: 'Ошибка',
-          icon: 'feather_alert_octagon',
-          timeout: 0,
-          actions: [{ icon: 'feather_x' }]
-        }); */
-        logout(router)
-
-        throw error
-      } else if (error?.response?.status === 401 && !config?.sent) {
-        config.sent = true
-
-        const refreshToken = window.localStorage.getItem(REFRESH_TOKEN_STORE_NAME)
-
-        if (!refreshToken) {
-          logout(router)
-          throw error
-        }
-        try {
-          const result = (await authApi.authControllerRefresh({ refreshToken }))
-            .data as unknown as JWTRefresh
-          if (result?.refreshToken) {
-            window.localStorage.setItem(REFRESH_TOKEN_STORE_NAME, result.refreshToken)
-          } else {
-            window.localStorage.removeItem(REFRESH_TOKEN_STORE_NAME)
-          }
-        } catch (e) {
-          console.log(e)
-          logout(router)
-        }
-
-        return axios(config)
-      }
-      throw error
-    })
 }

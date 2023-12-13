@@ -30,7 +30,7 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
  */
 export interface JWTRefresh {
     /**
-     * refresh токен
+     * Refresh token
      * @type {string}
      * @memberof JWTRefresh
      */
@@ -43,21 +43,77 @@ export interface JWTRefresh {
  */
 export interface LoginParams {
     /**
-     * логин
+     * Login
      * @type {string}
      * @memberof LoginParams
      */
     'login': string;
     /**
-     * ID сессии
+     * Session ID
      * @type {string}
      * @memberof LoginParams
      */
     'sessionId'?: string;
     /**
-     * Пароль+логин в md5 (в примере логин - admin пароль - 12345678 md5sum(admin12345678))
+     * Password + login in md5 (in the example login - admin password - 12345678 md5sum(admin12345678))
      * @type {string}
      * @memberof LoginParams
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface LogoutParams
+ */
+export interface LogoutParams {
+    /**
+     * Login
+     * @type {string}
+     * @memberof LogoutParams
+     */
+    'login': string;
+    /**
+     * Session ID
+     * @type {string}
+     * @memberof LogoutParams
+     */
+    'sessionId'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface RegisterUser
+ */
+export interface RegisterUser {
+    /**
+     * Login
+     * @type {string}
+     * @memberof RegisterUser
+     */
+    'login': string;
+    /**
+     * First name
+     * @type {string}
+     * @memberof RegisterUser
+     */
+    'firstName': string;
+    /**
+     * Last name
+     * @type {string}
+     * @memberof RegisterUser
+     */
+    'lastName': string;
+    /**
+     * Mail
+     * @type {string}
+     * @memberof RegisterUser
+     */
+    'email': string;
+    /**
+     * Password + login in md5
+     * @type {string}
+     * @memberof RegisterUser
      */
     'password': string;
 }
@@ -68,43 +124,43 @@ export interface LoginParams {
  */
 export interface UserCreate {
     /**
-     * логин
+     * Login
      * @type {string}
      * @memberof UserCreate
      */
     'login': string;
     /**
-     * имя
+     * First name
      * @type {string}
      * @memberof UserCreate
      */
     'firstName': string;
     /**
-     * фамилия
+     * Last name
      * @type {string}
      * @memberof UserCreate
      */
     'lastName': string;
     /**
-     * Почта
+     * Mail
      * @type {string}
      * @memberof UserCreate
      */
     'email': string;
     /**
-     * роль
+     * Role
      * @type {string}
      * @memberof UserCreate
      */
     'role': UserCreateRoleEnum;
     /**
-     * Заблокирован - 1/ разблокирован - 0
+     * Locked - 1/unlocked - 0
      * @type {number}
      * @memberof UserCreate
      */
     'locked': number;
     /**
-     * Пароль+логин в md5
+     * Password + login in md5
      * @type {string}
      * @memberof UserCreate
      */
@@ -126,49 +182,49 @@ export type UserCreateRoleEnum = typeof UserCreateRoleEnum[keyof typeof UserCrea
  */
 export interface UserItem {
     /**
-     * логин
+     * Login
      * @type {string}
      * @memberof UserItem
      */
     'login': string;
     /**
-     * имя
+     * First name
      * @type {string}
      * @memberof UserItem
      */
     'firstName': string;
     /**
-     * фамилия
+     * Last name
      * @type {string}
      * @memberof UserItem
      */
     'lastName': string;
     /**
-     * Почта
+     * Mail
      * @type {string}
      * @memberof UserItem
      */
     'email': string;
     /**
-     * роль
+     * Role
      * @type {string}
      * @memberof UserItem
      */
     'role': UserItemRoleEnum;
     /**
-     * Заблокирован - 1/ разблокирован - 0
+     * Locked - 1/unlocked - 0
      * @type {number}
      * @memberof UserItem
      */
     'locked': number;
     /**
-     * Время создания
+     * Creation time
      * @type {string}
      * @memberof UserItem
      */
     'createdAt'?: string;
     /**
-     * Время обновления
+     * Update time
      * @type {string}
      * @memberof UserItem
      */
@@ -190,13 +246,13 @@ export type UserItemRoleEnum = typeof UserItemRoleEnum[keyof typeof UserItemRole
  */
 export interface UserList {
     /**
-     * Список пользователей
+     * User list
      * @type {Array<UserItem>}
      * @memberof UserList
      */
     'items': Array<UserItem>;
     /**
-     * Всего пользователей соответсвуют фильтру
+     * Total users match the filter
      * @type {number}
      * @memberof UserList
      */
@@ -209,37 +265,37 @@ export interface UserList {
  */
 export interface UserUpdate {
     /**
-     * имя
+     * First name
      * @type {string}
      * @memberof UserUpdate
      */
     'firstName'?: string;
     /**
-     * фамилия
+     * Last name
      * @type {string}
      * @memberof UserUpdate
      */
     'lastName'?: string;
     /**
-     * Почта
+     * Mail
      * @type {string}
      * @memberof UserUpdate
      */
     'email'?: string;
     /**
-     * роль
+     * Role
      * @type {string}
      * @memberof UserUpdate
      */
     'role'?: UserUpdateRoleEnum;
     /**
-     * Заблокирован - 1/ разблокирован - 0
+     * Locked - 1/unlocked - 0
      * @type {number}
      * @memberof UserUpdate
      */
     'locked'?: number;
     /**
-     * Пароль+логин в md5
+     * Password + login in md5
      * @type {string}
      * @memberof UserUpdate
      */
@@ -256,14 +312,14 @@ export type UserUpdateRoleEnum = typeof UserUpdateRoleEnum[keyof typeof UserUpda
 
 
 /**
- * DefaultApi - axios parameter creator
+ * AuthorizationApi - axios parameter creator
  * @export
  */
-export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
+export const AuthorizationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Залогиниться (access токен устанавливается в сервер куку!!!)
+         * @summary Log in (access token is installed in the cookie server!!!)
          * @param {LoginParams} loginParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -299,16 +355,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Разлогиниться
-         * @param {string} login логин
+         * @summary Log out
+         * @param {LogoutParams} logoutParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerLogout: async (login: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'login' is not null or undefined
-            assertParamExists('authControllerLogout', 'login', login)
-            const localVarPath = `/auth/logout/{login}`
-                .replace(`{${"login"}}`, encodeURIComponent(String(login)));
+        authControllerLogout: async (logoutParams: LogoutParams, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'logoutParams' is not null or undefined
+            assertParamExists('authControllerLogout', 'logoutParams', logoutParams)
+            const localVarPath = `/auth/logout`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -322,9 +377,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(logoutParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -333,7 +391,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Получить новый access токен
+         * @summary Get a new access token
          * @param {JWTRefresh} jWTRefresh 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -369,7 +427,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Получить информацию о пользователе по access токену
+         * @summary Get information about the user using an access token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -397,9 +455,177 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+    }
+};
+
+/**
+ * AuthorizationApi - functional programming interface
+ * @export
+ */
+export const AuthorizationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthorizationApiAxiosParamCreator(configuration)
+    return {
         /**
          * 
-         * @summary Создать пользователя
+         * @summary Log in (access token is installed in the cookie server!!!)
+         * @param {LoginParams} loginParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerLogin(loginParams: LoginParams, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JWTRefresh>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogin(loginParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Log out
+         * @param {LogoutParams} logoutParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerLogout(logoutParams: LogoutParams, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogout(logoutParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a new access token
+         * @param {JWTRefresh} jWTRefresh 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerRefresh(jWTRefresh: JWTRefresh, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JWTRefresh>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerRefresh(jWTRefresh, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get information about the user using an access token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerWhoAmi(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerWhoAmi(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AuthorizationApi - factory interface
+ * @export
+ */
+export const AuthorizationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AuthorizationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Log in (access token is installed in the cookie server!!!)
+         * @param {LoginParams} loginParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerLogin(loginParams: LoginParams, options?: any): AxiosPromise<JWTRefresh> {
+            return localVarFp.authControllerLogin(loginParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Log out
+         * @param {LogoutParams} logoutParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerLogout(logoutParams: LogoutParams, options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerLogout(logoutParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a new access token
+         * @param {JWTRefresh} jWTRefresh 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerRefresh(jWTRefresh: JWTRefresh, options?: any): AxiosPromise<JWTRefresh> {
+            return localVarFp.authControllerRefresh(jWTRefresh, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get information about the user using an access token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerWhoAmi(options?: any): AxiosPromise<UserItem> {
+            return localVarFp.authControllerWhoAmi(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AuthorizationApi - object-oriented interface
+ * @export
+ * @class AuthorizationApi
+ * @extends {BaseAPI}
+ */
+export class AuthorizationApi extends BaseAPI {
+    /**
+     * 
+     * @summary Log in (access token is installed in the cookie server!!!)
+     * @param {LoginParams} loginParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApi
+     */
+    public authControllerLogin(loginParams: LoginParams, options?: AxiosRequestConfig) {
+        return AuthorizationApiFp(this.configuration).authControllerLogin(loginParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Log out
+     * @param {LogoutParams} logoutParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApi
+     */
+    public authControllerLogout(logoutParams: LogoutParams, options?: AxiosRequestConfig) {
+        return AuthorizationApiFp(this.configuration).authControllerLogout(logoutParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a new access token
+     * @param {JWTRefresh} jWTRefresh 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApi
+     */
+    public authControllerRefresh(jWTRefresh: JWTRefresh, options?: AxiosRequestConfig) {
+        return AuthorizationApiFp(this.configuration).authControllerRefresh(jWTRefresh, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get information about the user using an access token
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApi
+     */
+    public authControllerWhoAmi(options?: AxiosRequestConfig) {
+        return AuthorizationApiFp(this.configuration).authControllerWhoAmi(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * UserManagementApi - axios parameter creator
+ * @export
+ */
+export const UserManagementApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a user
          * @param {UserCreate} userCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -435,8 +661,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Удалить пользователя
-         * @param {string} login логин
+         * @summary Delete user
+         * @param {string} login Login
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -469,12 +695,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Получить список пользователей
-         * @param {number} limit Лимит
-         * @param {number} offset Смещение
-         * @param {string} [sort] Столбец сортировки
-         * @param {UsersControllerGetAllOrderEnum} [order] Сортировка. Направление. \&quot;ASC\&quot; - прямое, \&quot;DESC\&quot; - обратное.
-         * @param {string} [search] Поисковая строка. Поиск по имени, фамилии, email
+         * @summary Get list of users
+         * @param {number} limit Limit
+         * @param {number} offset Offset
+         * @param {string} [sort] Sort Column
+         * @param {UsersControllerGetAllOrderEnum} [order] Sorting. Direction. \&quot;ASC\&quot; - direct, \&quot;DESC\&quot; - reverse.
+         * @param {string} [search] Search string. Search by first name, last name, email
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -528,8 +754,44 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Изменить пользователя
-         * @param {string} login логин
+         * @summary Register a new user
+         * @param {RegisterUser} registerUser 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersControllerRegister: async (registerUser: RegisterUser, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registerUser' is not null or undefined
+            assertParamExists('usersControllerRegister', 'registerUser', registerUser)
+            const localVarPath = `/users/register`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(registerUser, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Change user
+         * @param {string} login Login
          * @param {UserUpdate} userUpdate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -570,58 +832,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 };
 
 /**
- * DefaultApi - functional programming interface
+ * UserManagementApi - functional programming interface
  * @export
  */
-export const DefaultApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
+export const UserManagementApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserManagementApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @summary Залогиниться (access токен устанавливается в сервер куку!!!)
-         * @param {LoginParams} loginParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authControllerLogin(loginParams: LoginParams, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JWTRefresh>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogin(loginParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Разлогиниться
-         * @param {string} login логин
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authControllerLogout(login: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogout(login, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Получить новый access токен
-         * @param {JWTRefresh} jWTRefresh 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authControllerRefresh(jWTRefresh: JWTRefresh, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JWTRefresh>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerRefresh(jWTRefresh, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Получить информацию о пользователе по access токену
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authControllerWhoAmi(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserItem>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerWhoAmi(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Создать пользователя
+         * @summary Create a user
          * @param {UserCreate} userCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -632,8 +851,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Удалить пользователя
-         * @param {string} login логин
+         * @summary Delete user
+         * @param {string} login Login
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -643,12 +862,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Получить список пользователей
-         * @param {number} limit Лимит
-         * @param {number} offset Смещение
-         * @param {string} [sort] Столбец сортировки
-         * @param {UsersControllerGetAllOrderEnum} [order] Сортировка. Направление. \&quot;ASC\&quot; - прямое, \&quot;DESC\&quot; - обратное.
-         * @param {string} [search] Поисковая строка. Поиск по имени, фамилии, email
+         * @summary Get list of users
+         * @param {number} limit Limit
+         * @param {number} offset Offset
+         * @param {string} [sort] Sort Column
+         * @param {UsersControllerGetAllOrderEnum} [order] Sorting. Direction. \&quot;ASC\&quot; - direct, \&quot;DESC\&quot; - reverse.
+         * @param {string} [search] Search string. Search by first name, last name, email
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -658,8 +877,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Изменить пользователя
-         * @param {string} login логин
+         * @summary Register a new user
+         * @param {RegisterUser} registerUser 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersControllerRegister(registerUser: RegisterUser, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersControllerRegister(registerUser, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Change user
+         * @param {string} login Login
          * @param {UserUpdate} userUpdate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -672,54 +902,15 @@ export const DefaultApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * DefaultApi - factory interface
+ * UserManagementApi - factory interface
  * @export
  */
-export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = DefaultApiFp(configuration)
+export const UserManagementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserManagementApiFp(configuration)
     return {
         /**
          * 
-         * @summary Залогиниться (access токен устанавливается в сервер куку!!!)
-         * @param {LoginParams} loginParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerLogin(loginParams: LoginParams, options?: any): AxiosPromise<JWTRefresh> {
-            return localVarFp.authControllerLogin(loginParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Разлогиниться
-         * @param {string} login логин
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerLogout(login: string, options?: any): AxiosPromise<void> {
-            return localVarFp.authControllerLogout(login, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Получить новый access токен
-         * @param {JWTRefresh} jWTRefresh 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerRefresh(jWTRefresh: JWTRefresh, options?: any): AxiosPromise<JWTRefresh> {
-            return localVarFp.authControllerRefresh(jWTRefresh, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Получить информацию о пользователе по access токену
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerWhoAmi(options?: any): AxiosPromise<UserItem> {
-            return localVarFp.authControllerWhoAmi(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Создать пользователя
+         * @summary Create a user
          * @param {UserCreate} userCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -729,8 +920,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Удалить пользователя
-         * @param {string} login логин
+         * @summary Delete user
+         * @param {string} login Login
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -739,12 +930,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Получить список пользователей
-         * @param {number} limit Лимит
-         * @param {number} offset Смещение
-         * @param {string} [sort] Столбец сортировки
-         * @param {UsersControllerGetAllOrderEnum} [order] Сортировка. Направление. \&quot;ASC\&quot; - прямое, \&quot;DESC\&quot; - обратное.
-         * @param {string} [search] Поисковая строка. Поиск по имени, фамилии, email
+         * @summary Get list of users
+         * @param {number} limit Limit
+         * @param {number} offset Offset
+         * @param {string} [sort] Sort Column
+         * @param {UsersControllerGetAllOrderEnum} [order] Sorting. Direction. \&quot;ASC\&quot; - direct, \&quot;DESC\&quot; - reverse.
+         * @param {string} [search] Search string. Search by first name, last name, email
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -753,8 +944,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Изменить пользователя
-         * @param {string} login логин
+         * @summary Register a new user
+         * @param {RegisterUser} registerUser 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersControllerRegister(registerUser: RegisterUser, options?: any): AxiosPromise<void> {
+            return localVarFp.usersControllerRegister(registerUser, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Change user
+         * @param {string} login Login
          * @param {UserUpdate} userUpdate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -766,110 +967,75 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
 };
 
 /**
- * DefaultApi - object-oriented interface
+ * UserManagementApi - object-oriented interface
  * @export
- * @class DefaultApi
+ * @class UserManagementApi
  * @extends {BaseAPI}
  */
-export class DefaultApi extends BaseAPI {
+export class UserManagementApi extends BaseAPI {
     /**
      * 
-     * @summary Залогиниться (access токен устанавливается в сервер куку!!!)
-     * @param {LoginParams} loginParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public authControllerLogin(loginParams: LoginParams, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).authControllerLogin(loginParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Разлогиниться
-     * @param {string} login логин
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public authControllerLogout(login: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).authControllerLogout(login, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Получить новый access токен
-     * @param {JWTRefresh} jWTRefresh 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public authControllerRefresh(jWTRefresh: JWTRefresh, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).authControllerRefresh(jWTRefresh, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Получить информацию о пользователе по access токену
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public authControllerWhoAmi(options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).authControllerWhoAmi(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Создать пользователя
+     * @summary Create a user
      * @param {UserCreate} userCreate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof UserManagementApi
      */
     public usersControllerCreate(userCreate: UserCreate, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersControllerCreate(userCreate, options).then((request) => request(this.axios, this.basePath));
+        return UserManagementApiFp(this.configuration).usersControllerCreate(userCreate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Удалить пользователя
-     * @param {string} login логин
+     * @summary Delete user
+     * @param {string} login Login
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof UserManagementApi
      */
     public usersControllerDelete(login: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersControllerDelete(login, options).then((request) => request(this.axios, this.basePath));
+        return UserManagementApiFp(this.configuration).usersControllerDelete(login, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Получить список пользователей
-     * @param {number} limit Лимит
-     * @param {number} offset Смещение
-     * @param {string} [sort] Столбец сортировки
-     * @param {UsersControllerGetAllOrderEnum} [order] Сортировка. Направление. \&quot;ASC\&quot; - прямое, \&quot;DESC\&quot; - обратное.
-     * @param {string} [search] Поисковая строка. Поиск по имени, фамилии, email
+     * @summary Get list of users
+     * @param {number} limit Limit
+     * @param {number} offset Offset
+     * @param {string} [sort] Sort Column
+     * @param {UsersControllerGetAllOrderEnum} [order] Sorting. Direction. \&quot;ASC\&quot; - direct, \&quot;DESC\&quot; - reverse.
+     * @param {string} [search] Search string. Search by first name, last name, email
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof UserManagementApi
      */
     public usersControllerGetAll(limit: number, offset: number, sort?: string, order?: UsersControllerGetAllOrderEnum, search?: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersControllerGetAll(limit, offset, sort, order, search, options).then((request) => request(this.axios, this.basePath));
+        return UserManagementApiFp(this.configuration).usersControllerGetAll(limit, offset, sort, order, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Изменить пользователя
-     * @param {string} login логин
+     * @summary Register a new user
+     * @param {RegisterUser} registerUser 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserManagementApi
+     */
+    public usersControllerRegister(registerUser: RegisterUser, options?: AxiosRequestConfig) {
+        return UserManagementApiFp(this.configuration).usersControllerRegister(registerUser, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Change user
+     * @param {string} login Login
      * @param {UserUpdate} userUpdate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof UserManagementApi
      */
     public usersControllerUpdate(login: string, userUpdate: UserUpdate, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersControllerUpdate(login, userUpdate, options).then((request) => request(this.axios, this.basePath));
+        return UserManagementApiFp(this.configuration).usersControllerUpdate(login, userUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

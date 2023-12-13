@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { showError } from 'src/utils/error'
+import { axiosInstance } from 'src/api/api'
 
 export function useExample () {
   const incDecValue = ref(0)
@@ -9,24 +9,24 @@ export function useExample () {
   const $q = useQuasar()
 
   function incrementReq () {
-    return axios.post('/api/increment')
+    return axiosInstance.post('/api/increment')
   }
 
   async function decrementReq () {
     try {
-      await axios.post('/api/decrement')
+      await axiosInstance.post('/api/decrement')
     } catch (e) {
       showError($q, e)
     }
   }
 
   async function getValue () {
-    const result = await axios.get('/api/result')
+    const result = await axiosInstance.get('/api/result')
     incDecValue.value = result.data
   }
 
   async function getRandomColor () {
-    const result = await axios.get('/api/randomColor')
+    const result = await axiosInstance.get('/api/randomColor')
     randomColor.value = result.data
   }
 
